@@ -16,7 +16,7 @@ from .keyring_utils import get_password_from_keyring
 from .meal import Meal
 from .note import Note
 from .fooditem import FoodItem
-from .fooditemserving import FoodItemServing
+from .fooditemserving import FoodServing
 
 
 logger = logging.getLogger(__name__)
