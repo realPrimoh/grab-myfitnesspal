@@ -14,7 +14,6 @@ from .day import Day
 from .entry import Entry
 from .keyring_utils import get_password_from_keyring
 from .meal import Meal
-from .note import Note
 from .fooditem import FoodItem
 from .fooditemserving import FoodServing
 
@@ -375,7 +374,6 @@ class Client(MFPBase):
 
         # Since this data requires an additional request, let's just
         # allow the day object to run the request if necessary.
-        notes = lambda: self._get_notes(date)
         water = lambda: self._get_water(date)
 
 
@@ -383,7 +381,6 @@ class Client(MFPBase):
             date=date,
             meals=meals,
             goals=goals,
-            notes=notes,
             water=water,
             complete=complete
         )
@@ -586,16 +583,6 @@ class Client(MFPBase):
         measurement_ids = self._get_measurement_ids(document)
         return measurement_ids
 
-    def _get_notes(self, date):
-        result = self._get_request_for_url(
-            parse.urljoin(
-                self.BASE_URL_SECURE,
-                '/food/note',
-            ) + "?date={date}".format(
-                date=date.strftime('%Y-%m-%d')
-            )
-        )
-        return Note(result.json()['item'])
 
     def _get_water(self, date):
         result = self._get_request_for_url(
