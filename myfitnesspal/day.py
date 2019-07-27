@@ -1,9 +1,13 @@
-class Day(object):
-    def __init__(self, date, meals=None, goals=None,
+from myfitnesspal.base import MFPBase
+
+
+class Day(MFPBase):
+    def __init__(self, date, meals=None, goals=None, notes=None,
                  water=None, exercises=None, complete=False):
         self._date = date
         self._meals = meals
         self._goals = goals
+        self._notes = notes
         self._water = water
         self._exercises = exercises
         self._totals = None
@@ -51,6 +55,10 @@ class Day(object):
         return self._date
 
     @property
+    def notes(self):
+        return self._notes()
+
+    @property
     def water(self):
         return self._water()
 
@@ -78,12 +86,4 @@ class Day(object):
         return u'%s %s' % (
             self.date.strftime('%x'),
             self.totals,
-        )
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __repr__(self):
-        return '<%s>' % (
-            str(self)
         )

@@ -1,4 +1,7 @@
-class FoodItem(object):
+from myfitnesspal.base import MFPBase
+
+
+class FoodItem(MFPBase):
     def __init__(self, mfp_id, name, brand, verified, serving, calories,
                  calcium=None, carbohydrates=None, cholesterol=None,
                  fat=None, fiber=None, iron=None, monounsaturated_fat=None,
@@ -131,12 +134,4 @@ class FoodItem(object):
         return u'%s -- %s' % (
             self.name,
             self.brand
-        )
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __repr__(self):
-        return '<%s>' % (
-            str(self)
         )

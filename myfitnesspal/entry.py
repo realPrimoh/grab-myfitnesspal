@@ -1,6 +1,9 @@
 import re
 
-class Entry(object):
+from myfitnesspal.base import MFPBase
+
+
+class Entry(MFPBase):
     def __init__(self, name, nutrition):
         self._name = name
         self._nutrition = nutrition
@@ -46,14 +49,6 @@ class Entry(object):
         return u'%s %s' % (
             self.name,
             self.nutrition_information,
-        )
-    
-    def __str__(self):
-        return self.__unicode__()
-
-    def __repr__(self):
-        return '<%s>' % (
-            str(self)
         )
 
     @property

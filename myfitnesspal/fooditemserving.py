@@ -1,4 +1,7 @@
-class FoodServing(object):
+from myfitnesspal.base import MFPBase
+
+
+class FoodItemServing(MFPBase):
     def __init__(self, serving_id, nutrition_multiplier, value, unit, index):
         self._serving_id = serving_id
         self._nutrition_multiplier = nutrition_multiplier
@@ -27,16 +30,8 @@ class FoodServing(object):
         return self._index
 
     def __unicode__(self):
-        return u'%.2f x %s, mult = %.3f' % (
+        return u'%.2f x %s = %.3f' % (
             self.value,
             self.unit,
             self.nutrition_multiplier
-        )
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def __repr__(self):
-        return '<%s>' % (
-            str(self)
         )

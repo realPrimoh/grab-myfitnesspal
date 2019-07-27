@@ -2,6 +2,9 @@ import datetime
 import logging
 import re
 import datetime as dt
+import csv
+import os
+import pickle
 
 import lxml.html
 from measurement.measures import Energy, Weight, Volume
@@ -12,15 +15,20 @@ from six.moves.urllib import parse
 from .base import MFPBase
 from .day import Day
 from .entry import Entry
-from .keyring_utils import get_password_from_keyring
 from .meal import Meal
+from .exercise import Exercise
+from .note import Note
 from .fooditem import FoodItem
-from .fooditemserving import FoodServing
+from .fooditemserving import FoodItemServing
 
 
 logger = logging.getLogger(__name__)
 
 BRITISH_UNIT_MATCHER = re.compile(r'(?:(?P<st>\d+) st)\W*(?:(?P<lbs>\d+) lb)?')
+
+
+
+
 
 
 class Client(MFPBase):
@@ -41,7 +49,7 @@ class Client(MFPBase):
         'sugar': (Weight, 'g'),
     }
 
-    def __init__(self, username, password=None, login=True, unit_aware=False):
+    def __init__(self, username, password, login=True, unit_aware=False):
         self.provided_username = username
         self.__password = password
         self.unit_aware = unit_aware
@@ -338,6 +346,132 @@ class Client(MFPBase):
 
         return meals
 
+    def _get_url_for_exercise(self, date, username):
+        return parse.urljoin(
+            self.BASE_URL,
+            'exercise/diary/' + username
+        ) + '?date=%s' % (
+            date.strftime('%Y-%m-%d')
+        )
+
+    def _get_exercise(self, document):
+        exercises = []
+        ex_headers = document.xpath("//table[@class='table0']")
+
+        for ex_header in ex_headers:
+            fields = []
+            tds = ex_header.findall('thead')[0].findall('tr')[0].findall('td')
+            ex_name = tds[0].text.lower()
+            if len(fields) == 0:
+                for field in tds:
+                    fields.append(
+                        self._get_full_name(
+                            field.text
+                        )
+                    )
+            row = ex_header.findall('tbody')[0].findall('tr')[0]
+            entries = []
+            while True:
+                if not row.attrib.get('class') is None:
+                    break
+                columns = row.findall('td')
+
+                # Cardio diary exercise descriptions are anchor tags
+                # within divs, but strength training exercise
+                # descriptions are just anchor tags within the td.
+
+                # But *first* we need to check whether an anchor
+                # tag exists, or we throw an error looking for
+                # an anchor tag within a div that doesn't exist
+
+                # check for `td > a`
+                name = ''
+                if columns[0].find('a') is not None:
+                    name = columns[0].find('a').text.strip()
+
+                # If name is empty string:
+                if columns[0].find('a') is None or not name:
+
+                    # check for `td > div > a`
+                    if columns[0].find('div').find('a') is None:
+                        # then check for just `td > div`
+                        # (this will occur when viewing a public diary entry)
+                        if columns[0].find('div') is not None:
+                            # if it exists, return `td > div.text`
+                            name = columns[0].find('div').text.strip()
+                        else:
+                            # if neither, return `td.text`
+                            name = columns[0].text.strip()
+                    else:
+                        # otherwise return `td > div > a.text`
+                        name = columns[0].find('div').find('a').text.strip()
+
+                attrs = {}
+
+                for n in range(1, len(columns)):
+                    column = columns[n]
+                    try:
+                        attr_name = fields[n]
+                    except IndexError:
+                        # This is the 'delete' button
+                        continue
+
+                    if column.text is None or 'N/A' in column.text:
+                        value = None
+                    else:
+                        value = self._get_numeric(column.text)
+
+                    attrs[attr_name] = self._get_measurement(
+                        attr_name,
+                        value
+                    )
+
+                entries.append(
+                    Entry(
+                        name,
+                        attrs,
+                    )
+                )
+                row = row.getnext()
+
+            exercises.append(
+                Exercise(
+                    ex_name,
+                    entries,
+                )
+            )
+
+        return exercises
+
+    def _get_exercises(self, *args, **kwargs):
+        if len(args) == 3:
+            date = datetime.date(
+                int(args[0]),
+                int(args[1]),
+                int(args[2]),
+            )
+        elif len(args) == 1 and isinstance(args[0], datetime.date):
+            date = args[0]
+        else:
+            raise ValueError(
+                'get_exercise accepts either a single datetime '
+                'or date instance, or three integers representing '
+                'year, month, and day respectively.'
+            )
+
+        # get the exercise URL
+        document = self._get_document_for_url(
+            self._get_url_for_exercise(
+                date,
+                kwargs.get('username', self.effective_username)
+            )
+        )
+
+        # gather the exercise goals
+        exercise = self._get_exercise(document)
+
+        return exercise
+
     def _extract_value(self, element):
         if len(element.getchildren()) == 0:
             value = self._get_numeric(element.text)
@@ -374,14 +508,18 @@ class Client(MFPBase):
 
         # Since this data requires an additional request, let's just
         # allow the day object to run the request if necessary.
+        notes = lambda: self._get_notes(date)
         water = lambda: self._get_water(date)
+        exercises = lambda: self._get_exercises(date)
 
 
         day = Day(
             date=date,
             meals=meals,
             goals=goals,
+            notes=notes,
             water=water,
+            exercises=exercises,
             complete=complete
         )
 
@@ -583,6 +721,16 @@ class Client(MFPBase):
         measurement_ids = self._get_measurement_ids(document)
         return measurement_ids
 
+    def _get_notes(self, date):
+        result = self._get_request_for_url(
+            parse.urljoin(
+                self.BASE_URL_SECURE,
+                '/food/note',
+            ) + "?date={date}".format(
+                date=date.strftime('%Y-%m-%d')
+            )
+        )
+        return Note(result.json()['item'])
 
     def _get_water(self, date):
         result = self._get_request_for_url(
@@ -661,8 +809,75 @@ class Client(MFPBase):
                     verif,
                     serving,
                     calories,
+                    
                 )
             )
+        infile = open('myfitnesspal/all_food_ids', 'rb')
+        food_id_cache = pickle.load(infile)
+        infile.close()
+        with open('foods.csv', 'a',) as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([
+                'MFP ID',
+                'Name', 
+                'Brand',
+                'Verified',
+                'Serving',
+                'Calories',
+                'Fat',
+                'Carbohydrates',
+                'Protein',
+                'Fiber',
+                'Sugar',
+                'Sodium',
+                'Calcium',
+                'Cholesterol',
+                'Iron',
+                'Monounsaturated Fat',
+                'Polyunsaturated Fat',
+                'Potassium',
+                'Saturated Fat',
+                'Trans Fat',
+                'Vitamin A',
+                'Vitamin C',
+                'Confirmations',
+                'Servings'
+            ])
+            for item in items:
+                item = self.get_food_item_details(item.mfp_id)
+                if item.mfp_id not in food_id_cache:
+                    writer.writerow([
+                        item.mfp_id,
+                        item.name,
+                        item.brand,
+                        item.verified,
+                        item.serving,
+                        item.calories,
+                        item.fat,
+                        item.carbohydrates,
+                        item.protein,
+                        item.fiber,
+                        item.sugar,
+                        item.sodium,
+                        item.calcium,
+                        item.cholesterol,
+                        item.iron,
+                        item.monounsaturated_fat,
+                        item.polyunsaturated_fat,
+                        item.potassium,
+                        item.saturated_fat,
+                        item.trans_fat,
+                        item.vitamin_a,
+                        item.vitamin_c,
+                        item.confirmations,
+                        item.servings
+                    ]) 
+                    food_id_cache.add(item.mfp_id)
+                else:
+                    print("This food item already exists in the cache... Skipping")
+        outfile = open("myfitnesspal/all_food_ids", 'wb')
+        pickle.dump(food_id_cache, outfile)
+        outfile.close()
 
         return items
 
