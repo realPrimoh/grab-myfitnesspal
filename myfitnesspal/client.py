@@ -768,7 +768,6 @@ class Client(MFPBase):
     def get_food_search_results(self, query: str) -> List[FoodItem]:
         """Search for foods matching a specified query."""
         search_url = parse.urljoin(self.BASE_URL_SECURE, self.SEARCH_PATH)
-        print("Search URL:", search_url)
         document = self._get_document_for_url(search_url)
         authenticity_token = document.xpath(
             "(//input[@name='authenticity_token']/@value)[1]"

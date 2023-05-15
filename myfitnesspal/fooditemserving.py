@@ -43,3 +43,12 @@ class FoodItemServing(MFPBase):
 
     def __str__(self) -> str:
         return f"{self.value:.2f} x {self.unit}"
+    
+    def dictify(self) -> dict:
+        curr_serving = {}
+        curr_serving['id'] = int(self._serving_id)
+        curr_serving['nutrition_multiplier'] = self.nutrition_multiplier
+        curr_serving['value'] = self.value
+        curr_serving['unit'] = self.unit
+        curr_serving['index'] = self.index
+        return curr_serving
