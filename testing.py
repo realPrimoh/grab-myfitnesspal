@@ -3,13 +3,15 @@ from supabase import create_client, Client
 import json
 
 
-supabase: Client = create_client("", "")
+supabase: Client = create_client(url, key)
 
 
 client = myfitnesspal.Client()
 
 local_arr = []
 local_arr += ['rice', 'pasta', 'bread', 'potatoes', 'meat', 'fish', 'eggs', 'dairy', 'fruits', 'vegetables', 'tofu', 'beans', 'nuts', 'seeds', 'honey', 'sugar', 'oil', 'butter', 'salt', 'pepper', 'garlic', 'onions', 'herbs', 'spices', 'coffee', 'tea', 'water', 'soda', 'juice', 'alcohol', 'chocolate', 'ice cream', 'cookies', 'cakes', 'pizza', 'hamburgers', 'fries', 'hot dogs', 'sandwiches', 'salads', 'soups', 'beverages', 'desserts']
+local_arr += ["cereal", "milk", "kirkland", "costco", "chicken bake", "oatmeal squares", "cashews", "coffee", "costco muffin", "whey protein", "optimum nutrition protein", "fairlife protein"]
+local_arr += ["fairlife protein shake", "steak", "chicken", "chicken tenderloin", "mcdonalds"]
 local_set = set(local_arr)
 search_q = []
 
