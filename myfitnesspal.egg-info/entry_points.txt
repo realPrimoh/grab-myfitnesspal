@@ -1,0 +1,3 @@
+[console_scripts]
+myfitnesspal = myfitnesspal.cmdline:main
+

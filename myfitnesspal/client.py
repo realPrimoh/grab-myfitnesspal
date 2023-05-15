@@ -801,6 +801,8 @@ class Client(MFPBase):
         for item_div in item_divs:
             # get mfp info from search results
             a = item_div.xpath(".//div[@class='search-title-container']/a")[0]
+            if a.get('data-food-type') == '1':
+                continue
             mfp_id = int(a.get("data-external-id"))
             mfp_name = a.text
             verif = (
