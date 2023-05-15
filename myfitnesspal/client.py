@@ -768,11 +768,12 @@ class Client(MFPBase):
     def get_food_search_results(self, query: str) -> List[FoodItem]:
         """Search for foods matching a specified query."""
         search_url = parse.urljoin(self.BASE_URL_SECURE, self.SEARCH_PATH)
+        print("Search URL:", search_url)
         document = self._get_document_for_url(search_url)
         authenticity_token = document.xpath(
             "(//input[@name='authenticity_token']/@value)[1]"
         )[0]
-        utf8_field = document.xpath("(//input[@name='utf8']/@value)[1]")[0]
+        utf8_field = document.xpath("(//input[@name='search']/@value)[1]")[0]
 
         result = self.session.post(
             search_url,
@@ -796,7 +797,6 @@ class Client(MFPBase):
 
     def _get_food_search_results(self, document) -> List[FoodItem]:
         item_divs = document.xpath("//li[@class='matched-food']")
-
         items = []
         for item_div in item_divs:
             # get mfp info from search results

@@ -6,23 +6,24 @@ client = myfitnesspal.Client()
 print("Got client")
 print("Opening foods_searched and loading...")
 infile = open("foods_searched",'rb')
-foods_searched=set(['apple', "mango", "watermelon", "banana", "orange", "pear", "blueberries", "chobani", "chobani yogurt", "greek yogurt", 
-"spaghetti", "bread", "fiber bread", "bagel", "thomas bagel", "chicken tenderloin", "chicken breast", "chicken", "oat milk",  "whole milk", "starbucks",
-"olive garden", "mcdonalds", "taco bell", "chipotle", "black bear diner", "ihop", "dennys", "kirkland milk", "milk", "skim milk", "almond milk",
-"whey protein", "optimum nutrition protein powder", "mini wheat cereal", "oatmeal squares", "special k cereal", "gr8nola", "latte", "mocha", "ferrero rocher", "milano", "pork sausage", "chicken sausage", "beef brisket", "pork belly",
-"egg", "ice cream", "halo top", "carrots", "broccoli", "kbbq", "butter chicken", "roti", "naan", "rice", "basmati rice", "jasmine rice", "cheerios", "chocolate cheerios", "cocoa puffs", "fruit loops", "kit kat", "snickers", "jalapeno chips", "doritos", "cheetos", "hot cheetos", "pringles", "coffee", "haagen-dazs", "pizza", "little caesars", "dominos", "pizza hut", "chicken pizza", "hawaiian pizza", "panang curry", "red curry", "green curry", "buffalo wild wings", "wingstop", "kirkland chicken tenderloin", "chicken nuggets", "breaded chicken", "costco muffin", "strawberries",
-["chicken wing", "turkey breast", "sliced turkey", "oven roasted turkey", "nutrigrain bar", "clif bar", "clif bar protein", "quest bar", "quest cookie", "lays", "takis", "thai iced tea", "mango lassi", "boba tea", "tea", "pesto chicken sandwich", "pesto pasta", "alfredo pasta", "marinara pasta", "chicken tikka", "bbq chicken", "protein pancakes",
-])
+# foods_searched=set(['apple', "mango", "watermelon", "banana", "orange", "pear", "blueberries", "chobani", "chobani yogurt", "greek yogurt", 
+# "spaghetti", "bread", "fiber bread", "bagel", "thomas bagel", "chicken tenderloin", "chicken breast", "chicken", "oat milk",  "whole milk", "starbucks",
+# "olive garden", "mcdonalds", "taco bell", "chipotle", "black bear diner", "ihop", "dennys", "kirkland milk", "milk", "skim milk", "almond milk",
+# "whey protein", "optimum nutrition protein powder", "mini wheat cereal", "oatmeal squares", "special k cereal", "gr8nola", "latte", "mocha", "ferrero rocher", "milano", "pork sausage", "chicken sausage", "beef brisket", "pork belly",
+# "egg", "ice cream", "halo top", "carrots", "broccoli", "kbbq", "butter chicken", "roti", "naan", "rice", "basmati rice", "jasmine rice", "cheerios", "chocolate cheerios", "cocoa puffs", "fruit loops", "kit kat", "snickers", "jalapeno chips", "doritos", "cheetos", "hot cheetos", "pringles", "coffee", "haagen-dazs", "pizza", "little caesars", "dominos", "pizza hut", "chicken pizza", "hawaiian pizza", "panang curry", "red curry", "green curry", "buffalo wild wings", "wingstop", "kirkland chicken tenderloin", "chicken nuggets", "breaded chicken", "costco muffin", "strawberries",
+# ["chicken wing", "turkey breast", "sliced turkey", "oven roasted turkey", "nutrigrain bar", "clif bar", "clif bar protein", "quest bar", "quest cookie", "lays", "takis", "thai iced tea", "mango lassi", "boba tea", "tea", "pesto chicken sandwich", "pesto pasta", "alfredo pasta", "marinara pasta", "chicken tikka", "bbq chicken", "protein pancakes",
+# ])
+foods_searched = set()
 print("infile", infile)
 print("foods_searched", foods_searched)
 infile.close()
 print("Got foods_searched")
 print(foods_searched)
 # pasta throws error currently
-foods_to_search = ]
+foods_to_search = ['apple']
 print("Searching foods...")
 searched = 0
-csvfile = open('foods.csv', 'a',)
+csvfile = open('new_foods.csv', 'a',)
 writer = csv.writer(csvfile)
 writer.writerow([
     'MFP ID',
