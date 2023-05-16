@@ -15,7 +15,7 @@ client = myfitnesspal.Client()
 local_arr = []
 local_arr += ['rice', 'pasta', 'bread', 'potatoes', 'meat', 'fish', 'eggs', 'dairy', 'fruits', 'vegetables', 'tofu', 'beans', 'nuts', 'seeds', 'honey', 'sugar', 'oil', 'butter', 'salt', 'pepper', 'garlic', 'onions', 'herbs', 'spices', 'coffee', 'tea', 'water', 'soda', 'juice', 'alcohol', 'chocolate', 'ice cream', 'cookies', 'cakes', 'pizza', 'hamburgers', 'fries', 'hot dogs', 'sandwiches', 'salads', 'soups', 'beverages', 'desserts']
 local_arr += ["cereal", "milk", "kirkland", "costco", "chicken bake", "oatmeal squares", "cashews", "coffee", "costco muffin", "whey protein", "optimum nutrition protein", "fairlife protein"]
-local_arr += ["fairlife protein shake", "steak", "chicken", "chicken tenderloin", "mcdonalds", "muscle milk", "chobani"]
+local_arr += ["fairlife protein shake", "steak", "chicken", "chicken tenderloin", "mcdonalds", "muscle milk", "chobani", "in n out", "panda express", "subway", "taco bell", "burger king", "wendys", "KFC", "Dominos", "papa johns", "little caesars", "pizza hut", "dairy queen", "arbys", "starbucks", "dunkin", "chipotle", "pork", "carnitas", "thai", "shrimp", "panang curry", "olive garden", "taro", "boba", "thai iced tea", "jamba juice", "donuts", "Krispy kreme", "baja fresh", "lays", "doritos", "miss vickies", "goldfish", "cheetos", "takis", "turkey", "salmon", "tuna", "tilapia", "breaded tilapia", "quinoa", "brown rice", "protein bar", "clif bar", "cheese", "haagen dazs", "halo top", "oats", "cocoa puffs", "special k", "peanut butter", "nutella", "almond butter", "ferrero rocher", "trader joes", "buffalo wild wings"]
 local_set = set(local_arr)
 search_q = []
 
