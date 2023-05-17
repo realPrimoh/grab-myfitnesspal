@@ -7,20 +7,197 @@ from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
 
-supabase: Client = create_client(os.environ.get('url'), os.environ.get('key'))
+supabase: Client = create_client(os.environ.get("url"), os.environ.get("key"))
 
 
 client = myfitnesspal.Client()
 
 local_arr = []
-local_arr += ['rice', 'pasta', 'bread', 'potatoes', 'meat', 'fish', 'eggs', 'dairy', 'fruits', 'vegetables', 'tofu', 'beans', 'nuts', 'seeds', 'honey', 'sugar', 'oil', 'butter', 'salt', 'pepper', 'garlic', 'onions', 'herbs', 'spices', 'coffee', 'tea', 'water', 'soda', 'juice', 'alcohol', 'chocolate', 'ice cream', 'cookies', 'cakes', 'pizza', 'hamburgers', 'fries', 'hot dogs', 'sandwiches', 'salads', 'soups', 'beverages', 'desserts']
-local_arr += ["cereal", "milk", "kirkland", "costco", "chicken bake", "oatmeal squares", "cashews", "coffee", "costco muffin", "whey protein", "optimum nutrition protein", "fairlife protein"]
-local_arr += ["fairlife protein shake", "steak", "chicken", "chicken tenderloin", "mcdonalds", "muscle milk", "chobani", "in n out", "panda express", "subway", "taco bell", "burger king", "wendys", "KFC", "Dominos", "papa johns", "little caesars", "pizza hut", "dairy queen", "arbys", "starbucks", "dunkin", "chipotle", "pork", "carnitas", "thai", "shrimp", "panang curry", "olive garden", "taro", "boba", "thai iced tea", "jamba juice", "donuts", "Krispy kreme", "baja fresh", "lays", "doritos", "miss vickies", "goldfish", "cheetos", "takis", "turkey", "salmon", "tuna", "tilapia", "breaded tilapia", "quinoa", "brown rice", "protein bar", "clif bar", "cheese", "haagen dazs", "halo top", "oats", "cocoa puffs", "special k", "peanut butter", "nutella", "almond butter", "ferrero rocher", "trader joes", "buffalo wild wings"]
+local_arr += [
+    "rice",
+    "pasta",
+    "bread",
+    "potatoes",
+    "meat",
+    "fish",
+    "eggs",
+    "dairy",
+    "fruits",
+    "vegetables",
+    "tofu",
+    "beans",
+    "nuts",
+    "seeds",
+    "honey",
+    "sugar",
+    "oil",
+    "butter",
+    "salt",
+    "pepper",
+    "garlic",
+    "onions",
+    "herbs",
+    "spices",
+    "coffee",
+    "tea",
+    "water",
+    "soda",
+    "juice",
+    "alcohol",
+    "chocolate",
+    "ice cream",
+    "cookies",
+    "cakes",
+    "pizza",
+    "hamburgers",
+    "fries",
+    "hot dogs",
+    "sandwiches",
+    "salads",
+    "soups",
+    "beverages",
+    "desserts",
+]
+local_arr += [
+    "cereal",
+    "milk",
+    "kirkland",
+    "costco",
+    "chicken bake",
+    "oatmeal squares",
+    "cashews",
+    "coffee",
+    "costco muffin",
+    "whey protein",
+    "optimum nutrition protein",
+    "fairlife protein",
+    "chilis",
+    "panera",
+    "pinkberry",
+    "gong cha",
+    "whataburger",
+    "the habit",
+    "five guys",
+    "pf changs",
+]
+local_arr += [
+    "fairlife protein shake",
+    "steak",
+    "chicken",
+    "chicken tenderloin",
+    "mcdonalds",
+    "muscle milk",
+    "chobani",
+    "in n out",
+    "panda express",
+    "subway",
+    "taco bell",
+    "burger king",
+    "wendys",
+    "KFC",
+    "Dominos",
+    "papa johns",
+    "little caesars",
+    "pizza hut",
+    "dairy queen",
+    "arbys",
+    "starbucks",
+    "dunkin",
+    "chipotle",
+    "pork",
+    "carnitas",
+    "thai",
+    "shrimp",
+    "panang curry",
+    "olive garden",
+    "taro",
+    "boba",
+    "thai iced tea",
+    "jamba juice",
+    "donuts",
+    "Krispy kreme",
+    "baja fresh",
+    "lays",
+    "doritos",
+    "miss vickies",
+    "goldfish",
+    "cheetos",
+    "takis",
+    "turkey",
+    "salmon",
+    "tuna",
+    "tilapia",
+    "breaded tilapia",
+    "quinoa",
+    "brown rice",
+    "protein bar",
+    "clif bar",
+    "cheese",
+    "haagen dazs",
+    "halo top",
+    "oats",
+    "cocoa puffs",
+    "special k",
+    "peanut butter",
+    "nutella",
+    "almond butter",
+    "ferrero rocher",
+    "trader joes",
+    "buffalo wild wings",
+    "chicken melt",
+    "ramen",
+    "maggi noodles",
+    "potstickers",
+    "chicken nuggets",
+    "panko breaded chicken",
+    "drumsticks",
+    "ben and jerrys",
+    "coldstone",
+    "baskin robbins",
+    "gyro",
+    "egg tart",
+    "fruit snacks",
+    "vitamin water",
+    "hint water",
+    "sea bass",
+    "alligator",
+    "lamb",
+    "shark",
+    "lobster",
+    "crab",
+    "carrots",
+    "broccoli",
+    "lettuce",
+    "kale",
+    "almonds",
+    "peanuts",
+    "chocolate milk",
+    "korean barbeque",
+    "pork belly",
+    "steak",
+    "beef",
+    "brisket",
+    "ribs",
+    "short ribs",
+    "burger",
+    "cheeseburger",
+    "chicken sandwich",
+    "taco shells",
+    "tortilla",
+    "roti",
+    "butter chicken",
+    "naan",
+    "basmati rice",
+    "tandoori chicken",
+    "chicken tikka masala",
+    "mango sticky rice",
+    "ice cream cone",
+]
 local_set = set(local_arr)
 search_q = []
 
 for searchable in search_q:
-    if (searchable in local_set):
+    if searchable in local_set:
         continue
     food_items = client.get_food_search_results(searchable)
     for i in food_items:
@@ -91,14 +268,14 @@ for searchable in search_q:
             #     print("Serving match SUCCESS!")
             # food_dict["linked_servings"] = [s["uuid"] for s in serving_items]
             try:
-                data, count = supabase.table('foods').insert(food_dict).execute()
+                data, count = supabase.table("foods").insert(food_dict).execute()
                 print("------")
                 print("Successfully added:", item)
                 print("------")
             except Exception as e:
-                    print("Food addition error:", e)
-                    if (e.__getattribute__('code') == '23505'):
-                        print("Duplicate Food addition error:", e)
+                print("Food addition error:", e)
+                if e.__getattribute__("code") == "23505":
+                    print("Duplicate Food addition error:", e)
         except Exception as e:
             print("PROGRAM ERROR:", e)
             print("Current food item failed on item:", item)
