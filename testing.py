@@ -192,6 +192,8 @@ local_arr += [
     "chicken tikka masala",
     "mango sticky rice",
     "ice cream cone",
+    "bibigo potstickers",
+    "breaded tilapia",
 ]
 local_set = set(local_arr)
 search_q = []
