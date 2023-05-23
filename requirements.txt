@@ -39,7 +39,7 @@ python-gitlab==3.14.0
 python-semantic-release==7.33.2
 readme-renderer==37.3
 realtime==1.0.0
-requests==2.30.0
+requests==2.31.0
 requests-toolbelt==1.0.0
 rfc3986==1.5.0
 semver==2.13.0
